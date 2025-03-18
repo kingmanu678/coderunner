@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Code Runner</title>
+    <!-- CodeMirror -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/monokai.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/default.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/python/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/clike/clike.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/javascript/javascript.min.js"></script>
+    <!-- Your CSS and JS -->
+    <link rel="stylesheet" href="/static/styles.css">
+    <!-- Jinja2 template engine -->
+</head>
+<body class="dark">
+    <div class="header">
+        <h1>Code Runner</h1>
+        <div class="user-section">
+            <div class="theme-switch-wrapper">
+                <label class="theme-switch">
+                    <input type="checkbox" id="theme-toggle">
+                    <span class="slider round"></span>
+                </label>
+                <span class="theme-label">Dark Mode</span>
+            </div>
+            <div class="user-profile" id="user-profile">
+                <div class="user-avatar">
+                    {% if session.get('user', {}).get('picture') %}
+                        <img src="{{ session['user']['picture'] }}" alt="User Avatar" class="avatar-image">
+                    {% else %}
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
+                        </svg>
+                    {% endif %}
+                </div>
+                <span class="user-name">
+                    {% if session.get('user') %}
+                        {{ session['user'].get('name', session['user'].get('email', 'User')) }}
+                    {% else %}
+                        Guest
+                    {% endif %}
+                </span>
+                {% if session.get('user') %}
+                <div class="dropdown-menu">
+                    <a href="/logout" class="dropdown-item">Logout</a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div id="editor-container">
+            <div class="language-controls">
+                <select id="language-select">
+                    <option value="python">Python</option>
+                    <option value="cpp">C++</option>
+                    <option value="java">Java</option>
+                    <option value="javascript">JavaScript</option>
+                </select>
+            </div>
+            
+            <input type="text" id="java-class-name" placeholder="Java Main Class (optional)">
+            
+            <div id="editor"></div>
+        </div>
+        <div id="output-container">
+            <h3>Input</h3>
+            <textarea id="input-box" placeholder="Enter input here"></textarea>
+            
+            <div class="button-group">
+                <button id="save-button">Save Code</button>
+                <button id="run-button">Run Code</button>
+            </div>
+            
+            <h3>Output</h3>
+            <div id="output"></div>
+        </div>
+    </div>
+    <script src="/static/script.js"></script>
+</body>
+</html>
